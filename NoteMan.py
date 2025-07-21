@@ -7,3 +7,12 @@ def get_category():
             return category
         else:
             print("\nInvalid selection. Please select a valid category.")
+
+def main():
+    category = get_category()
+
+    if category == "N":
+        print("NOTE FUNCTION UNDER CONSTRUCTION")
+    elif category == "T":
+        print("TASK FUNCTION UNDER CONSTRUCTION")
+main()
