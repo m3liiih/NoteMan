@@ -1,4 +1,6 @@
 import os
+note_dir = "notes"
+
 
 # Main action loop to select category of action
 def get_category():
@@ -10,6 +12,7 @@ def get_category():
             break
         else:
             print("\nInvalid selection. Please select a valid category.")
+
 
 def note_taking():
     while True:
@@ -28,33 +31,39 @@ def note_taking():
         else:
             print("\nInvalid selection. Please select a valid option.")
 
+
 # txt editor implementation for windows
 def new_note():
     note_name = input("\n| New Note | Enter note name:\n-- ")
     # Remove .txt if user includes it in filename (worst case " fi le na me .txt ")
     note_name = note_name.strip().removesuffix(".txt").strip()
     filename = f"{note_name}.txt"
+    filepath = os.path.join(note_dir, filename)
+
     if os.path.exists(filename):
         print(f"\n Note '{note_name}' already exists. Opening note...")
     else:
         with open(filename, "w") as file:
             file.write("")
         print(f"\nNote '{note_name}' created successfully.")
-    os.startfile(filename)
+    os.startfile(filepath)
+
 
 def list_notes():
     print("\n| List of Notes |")
-    notes = [f for f in os.listdir() if f.endswith('.txt')]
+    notes = [f for f in os.listdir(note_dir) if f.endswith('.txt')]
     if notes:
         for note in notes:
             print(f"- {note}")
     else:
         print("No notes found.")
 
+
 def delete_notes():
     note_name = input("\n| Delete Note | Enter the name of the note to delete:\n-- ")
     note_name = note_name.strip().removesuffix(".txt").strip()
     filename = f"{note_name}.txt"
+    filepath = os.path.join(note_dir, filename)
 
     if os.path.exists(filename):
         os.remove(filename)
@@ -62,7 +71,12 @@ def delete_notes():
     else:
         print(f"\nNote '{note_name}' does not exist.")
 
+    os.startfile(filepath)
+
 def main():
+    if not os.path.exists(note_dir):
+        os.makedirs(note_dir)
+
     print("\nWelcome to NoteMan, your personal Note Taking and Task Management Companion :)")
 
     while True:
