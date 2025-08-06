@@ -40,12 +40,13 @@ def new_note():
     filename = f"{note_name}.txt"
     filepath = os.path.join(note_dir, filename)
 
-    if os.path.exists(filename):
+    if os.path.exists(filepath):
         print(f"\n Note '{note_name}' already exists. Opening note...")
     else:
-        with open(filename, "w") as file:
-            file.write("")
+        with open(filepath, "w") as file:
+            file.write(f"| NoteMan | {note_name} | Ctrl+S to Save | Ctrl+W to Close |\n\n")
         print(f"\nNote '{note_name}' created successfully.")
+
     os.startfile(filepath)
 
 
@@ -65,13 +66,12 @@ def delete_notes():
     filename = f"{note_name}.txt"
     filepath = os.path.join(note_dir, filename)
 
-    if os.path.exists(filename):
-        os.remove(filename)
+    if os.path.exists(filepath):
+        os.remove(filepath)
         print(f"\nNote '{note_name}' deleted successfully.")
     else:
         print(f"\nNote '{note_name}' does not exist.")
 
-    os.startfile(filepath)
 
 def main():
     if not os.path.exists(note_dir):
