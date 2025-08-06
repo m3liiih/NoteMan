@@ -11,24 +11,25 @@ def get_category():
         if category in ["N", "T"]:
             return category
         elif category == "X":
-            break
+            exit()
         else:
             print("\nInvalid selection. Please select a valid category.")
 
 
 def note_taking():
     while True:
-        print("\n| Note Taking | \"new\" for New Note | \"ls\" to List Notes | \"del\" to Delete Note | \"X\" - back |")
+        print("\n| Note Taking | \"new\" for New Note | \"ls\" to List Notes and Note Options | \"X\" - main menu |")
         option = input("-- ").upper()
 
         if option == "NEW":
             new_note()
         elif option == "LS":
             list_notes()
-        elif option == "DEL":
-            list_notes()
-            delete_notes()
+        #elif option == "DEL":
+        #    list_notes()
+        #    delete_notes()
         elif option == "X":
+            print()
             break
         else:
             print("\nInvalid selection. Please select a valid option.")
@@ -36,7 +37,7 @@ def note_taking():
 
 def task_management():
     while True:
-        print("\n| Task Management | \"new\" for New Task | \"ls\" to List Tasks | \"del\" to Delete Task | \"X\" - back |")
+        print("\n| Task Management | \"new\" for New Task | \"ls\" to List Tasks and Manage Tasks | \"X\" - back |")
         option = input("-- ").upper()
 
         if option == "NEW":
@@ -65,34 +66,69 @@ def task_management():
 
 # txt editor implementation for windows
 def new_note():
-    note_name = input("\n| New Note | Enter note name:\n-- ")
-    # Remove .txt if user includes it in filename (worst case " fi le na me .txt ")
-    note_name = note_name.strip().removesuffix(".txt").strip()
-    filename = f"{note_name}.txt"
-    filepath = os.path.join(note_dir, filename)
+    while True:
+        note_name = input("\n| New Note | Enter note name: | \"X\" - cancel |\n-- ")
+        # Remove .txt if user includes it in filename (worst case " fi le na me .txt ")
+        note_name = note_name.strip().removesuffix(".txt").strip()
+        filename = f"{note_name}.txt"
+        filepath = os.path.join(note_dir, filename)
 
-    if os.path.exists(filepath):
-        print(f"\n Note '{note_name}' already exists. Opening note...")
-    else:
-        with open(filepath, "w") as file:
-            file.write(f"| NoteMan | {note_name} | Ctrl+S to Save | Ctrl+W to Close |\n\n")
-        print(f"\nNote '{note_name}' created successfully.")
-
-    os.startfile(filepath)
+        if note_name.upper() == "X":
+            break
+        elif os.path.exists(filepath):
+            print(f"\n Note '{note_name}' already exists. Opening note...")
+        else:
+            with open(filepath, "w") as file:
+                file.write(f"| NoteMan | {note_name} | Ctrl+S to Save | Ctrl+W to Close |\n\n")
+            print(f"\nNote '{note_name}' created successfully.")
+        os.startfile(filepath)
 
 
 def new_task():
-    print("New task functionality is under construction.")
-
+    task_name = input("\n| New Task | Enter task name:\n-- ")
+    task_name = task_name.strip().removesuffix(".txt").strip()
+    filename = f"{task_name}.txt" # undetermined
 
 def list_notes():
     print("\n| List of Notes |")
+
     notes = [f for f in os.listdir(note_dir) if f.endswith('.txt')]
     if notes:
         for note in notes:
+            # Removed extension to not confuse the user while performing actions with note names
+            note = note.removesuffix(".txt")
             print(f"- {note}")
     else:
         print("No notes found.")
+
+    while True:
+        print("\n| Options | \"op\" to Open Note | \"del\" to Delete Note | \"X\" - back |")
+        option = input("-- ").upper()
+
+        if option == "OP":
+            open_note()
+        elif option == "DEL":
+            delete_notes()
+        elif option == "X":
+            break
+        else:
+            print("\nInvalid selection. Please select a valid option.")
+
+
+def open_note():
+    while True:
+        note_name = input("\n| Open Note | Enter the name of the note to open: | \"X\" - cancel\n-- ")
+        note_name = note_name.strip().removesuffix(".txt").strip()
+        filename = f"{note_name}.txt"
+        filepath = os.path.join(note_dir, filename)
+
+        if note_name.upper() == "X":
+            break
+        else:
+            if os.path.exists(filepath):
+                os.startfile(filepath)
+            else:
+                print(f"\nNote '{note_name}' does not exist.")
 
 
 def list_tasks():
@@ -100,16 +136,19 @@ def list_tasks():
 
 
 def delete_notes():
-    note_name = input("\n| Delete Note | Enter the name of the note to delete:\n-- ")
-    note_name = note_name.strip().removesuffix(".txt").strip()
-    filename = f"{note_name}.txt"
-    filepath = os.path.join(note_dir, filename)
+    while True:
+        note_name = input("\n| Delete Note | Enter the name of the note to delete: | \"X\" - cancel |\n-- ")
+        note_name = note_name.strip().removesuffix(".txt").strip()
+        filename = f"{note_name}.txt"
+        filepath = os.path.join(note_dir, filename)
 
-    if os.path.exists(filepath):
-        os.remove(filepath)
-        print(f"\nNote '{note_name}' deleted successfully.")
-    else:
-        print(f"\nNote '{note_name}' does not exist.")
+        if note_name.upper() == "X":
+            break
+        elif os.path.exists(filepath):
+            os.remove(filepath)
+            print(f"\nNote '{note_name}' deleted successfully.")
+        else:
+            print(f"\nNote '{note_name}' does not exist.")
 
 
 def delete_tasks():
