@@ -1,5 +1,7 @@
 import os
+import datetime # reserved for future implementation
 note_dir = "notes"
+task_dir = "tasks"
 
 
 # Main action loop to select category of action
@@ -32,6 +34,35 @@ def note_taking():
             print("\nInvalid selection. Please select a valid option.")
 
 
+def task_management():
+    while True:
+        print("\n| Task Management | \"new\" for New Task | \"ls\" to List Tasks | \"del\" to Delete Task | \"X\" - back |")
+        option = input("-- ").upper()
+
+        if option == "NEW":
+            new_task()
+        elif option == "LS":
+            list_tasks()
+        elif option == "DEL":
+            print("Delete task functionality is under construction.")
+        elif option == "X":
+            break
+        else:
+            print("\nInvalid selection. Please select a valid option.")
+
+    # TBD How to implement task management? Making it different from notes...
+    # use of datetime module (maybe for notes as well)
+    # Different file format? No os text editor or different approach.
+    # Deadlines, priorities, marking tasks complete etc.
+
+    # Later to be considered:
+    # Calendar like look for tasks?
+    # UI implementation using tkinter?
+    # Extra features (classified)
+    # - m3liiih
+
+
+
 # txt editor implementation for windows
 def new_note():
     note_name = input("\n| New Note | Enter note name:\n-- ")
@@ -50,6 +81,10 @@ def new_note():
     os.startfile(filepath)
 
 
+def new_task():
+    print("New task functionality is under construction.")
+
+
 def list_notes():
     print("\n| List of Notes |")
     notes = [f for f in os.listdir(note_dir) if f.endswith('.txt')]
@@ -58,6 +93,10 @@ def list_notes():
             print(f"- {note}")
     else:
         print("No notes found.")
+
+
+def list_tasks():
+    print("Task listing is under construction.")
 
 
 def delete_notes():
@@ -73,9 +112,16 @@ def delete_notes():
         print(f"\nNote '{note_name}' does not exist.")
 
 
+def delete_tasks():
+    print("Delete task functionality is under construction.")
+
+
 def main():
     if not os.path.exists(note_dir):
         os.makedirs(note_dir)
+
+    if not os.path.exists(task_dir):
+        os.makedirs(task_dir)
 
     print("\nWelcome to NoteMan, your personal Note Taking and Task Management Companion :)")
 
@@ -85,5 +131,5 @@ def main():
         if category == "N":
             note_taking()
         elif category == "T":
-            print("TASK FUNCTION UNDER CONSTRUCTION")
+            task_management()
 main()
