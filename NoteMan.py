@@ -25,9 +25,6 @@ def note_taking():
             new_note()
         elif option == "LS":
             list_notes()
-        #elif option == "DEL":
-        #    list_notes()
-        #    delete_notes()
         elif option == "X":
             print()
             break
@@ -44,8 +41,6 @@ def task_management():
             new_task()
         elif option == "LS":
             list_tasks()
-        elif option == "DEL":
-            print("Delete task functionality is under construction.")
         elif option == "X":
             break
         else:
@@ -124,11 +119,10 @@ def open_note():
 
         if note_name.upper() == "X":
             break
-        else:
-            if os.path.exists(filepath):
+        elif os.path.exists(filepath):
                 os.startfile(filepath)
-            else:
-                print(f"\nNote '{note_name}' does not exist.")
+        else:
+            print(f"\nNote '{note_name}' does not exist.")
 
 
 def list_tasks():
