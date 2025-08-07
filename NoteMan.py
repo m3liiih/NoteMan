@@ -1,5 +1,6 @@
 import os
-import datetime # reserved for future implementation
+import json
+import datetime
 note_dir = "notes"
 task_dir = "tasks"
 
@@ -80,9 +81,30 @@ def new_note():
 
 
 def new_task():
-    task_name = input("\n| New Task | Enter task name:\n-- ")
-    task_name = task_name.strip().removesuffix(".txt").strip()
-    filename = f"{task_name}.txt" # undetermined
+    while True:
+        task_name = input("\n| New Task | Enter task name: | \"X\" - cancel\n-- ")
+        task_description = input("Enter task description (optional):\n-- ")
+        task_name = task_name.strip().removesuffix(".txt").strip()
+        filename = f"{task_name}.json"
+        filepath = os.path.join(task_dir, filename)
+
+        if task_name.upper() == "X":
+            break
+        elif os.path.exists(filepath):
+            print(f"\nTask '{task_name}' already exists.")
+        else:
+            task_data = {
+                "name": task_name,
+                "description": task_description.strip(),
+                "created_at": datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+                "completed": False,
+                "due_date": None,
+                "priority": None
+            }
+            with open(filepath, "w") as task:
+                json.dump(task_data, task, indent=4)
+            print(f"\nTask '{task_name}' created successfully.")
+
 
 def list_notes():
     print("\n| List of Notes |")
