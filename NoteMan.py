@@ -48,17 +48,6 @@ def task_management():
         else:
             print("\n| Error | Invalid selection. Please select a valid option.")
 
-    # TBD How to implement task management? Making it different from notes... (done as json format)
-    # use of datetime module (maybe for notes as well) (implemented for tasks) (due needs work)
-    # Different file format? No os text editor or different approach. (done as jsons and auto read)
-    # Deadlines, priorities, marking tasks complete etc. (due and priority implemented, marking not yet done)
-
-    # Later to be considered:
-    # Calendar like look for tasks?
-    # UI implementation using tkinter?
-    # Extra features (classified)
-    # - m3liiih
-
 
 # txt editor implementation for windows
 def new_note():
@@ -91,12 +80,19 @@ def new_task():
             if task_due:
                 try:
                     due_check = datetime.datetime.strptime(task_due, "%d-%m-%Y")
-                    if due_check < datetime.datetime.now():
+                    if due_check.date() < datetime.datetime.now().date():
                         print("| Warning | Due date can not be in the past. Please enter a valid due date.")
+                    # Planning to add due date today with time input
                     else:
                         break
                 except ValueError:
                     print("| Error | Invalid date format. Please use DD-MM-YYYY.")
+        while True:
+            task_priority = input("Enter task priority (optional): | (format: 'H' High, 'M' Medium, 'L' Low) |\n-- ")
+            if task_priority.upper() in ['H', 'M', 'L', '']:
+                break
+            else:
+                print("| Error | Invalid priority. Please enter 'H' for High, 'M' for Medium, 'L' for Low")
         # Removing .json is actually overkill but still
         task_name = task_name.strip().removesuffix(".txt").removesuffix(".json").strip()
         filename = f"{task_name}.json"
@@ -172,6 +168,7 @@ def list_tasks():
                     task_data = json.load(file)
                     print(f"- {task_data['name']}\n\tPriority: {task_data['priority']}\n\tDue: {task_data['due_date']}")
                     print(f"\tDescription: {task_data['description'] if task_data['description'] else "None"}")
+                    print(f"\tStatus: {'Completed' if task_data['completed'] else 'In Progress'}")
             except (json.JSONDecodeError, KeyError):
                 print(f"- {task} (Invalid or corrupted task file)")
     else:
@@ -182,7 +179,7 @@ def list_tasks():
         option = input("-- ").upper()
 
         if option == "CC":
-            print("\n| Marking Task Complete Under Construction |")
+            task_complete()
         elif option == "DEL":
             delete_tasks()
         elif option == "X":
@@ -190,6 +187,27 @@ def list_tasks():
         else:
             print("\n| Error | Invalid selection. Please select a valid option.")
 
+def task_complete():
+    while True:
+        task_name = input("\n| Complete Task | Enter the name of the task to mark as complete: | \"X\" - cancel |\n-- ")
+        if task_name.upper() == "X":
+            break
+        task_name = task_name.strip().removesuffix(".json").strip()
+        filename = f"{task_name}.json"
+        filepath = os.path.join(task_dir, filename)
+
+        if os.path.exists(filepath):
+            with open(filepath, 'r') as file:
+                try:
+                    task_data = json.load(file)
+                    task_data['completed'] = True
+                    with open(filepath, 'w') as file:
+                        json.dump(task_data, file, indent=4)
+                    print(f"\nTask '{task_name}' marked as complete.")
+                except json.JSONDecodeError:
+                    print(f"\nTask '{task_name}' is corrupted or invalid.")
+        else:
+            print(f"\n| Error | Task '{task_name}' does not exist. Try again.")
 
 def delete_notes():
     while True:
@@ -204,7 +222,7 @@ def delete_notes():
             os.remove(filepath)
             print(f"\nNote '{note_name}' deleted successfully.")
         else:
-            print(f"\nNote '{note_name}' does not exist. Try again.")
+            print(f"\n| Error | Note '{note_name}' does not exist. Try again.")
 
 
 def delete_tasks():
@@ -220,7 +238,7 @@ def delete_tasks():
             os.remove(filepath)
             print(f"\nTask '{task_name}' deleted successfully.")
         else:
-            print(f"\nTask '{task_name}' does not exist. Try again.")
+            print(f"\n| Error | Task '{task_name}' does not exist. Try again.")
 
 
 def main():
