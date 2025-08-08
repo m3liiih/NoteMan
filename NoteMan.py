@@ -14,7 +14,7 @@ def get_category():
         elif category == "X":
             exit()
         else:
-            print("\nInvalid selection. Please select a valid category.")
+            print("\n| Error | Invalid selection. Please select a valid category.")
 
 
 def note_taking():
@@ -30,7 +30,7 @@ def note_taking():
             print()
             break
         else:
-            print("\nInvalid selection. Please select a valid option.")
+            print("\n| Error | Invalid selection. Please select a valid option.")
 
 
 def task_management():
@@ -46,7 +46,7 @@ def task_management():
             print()
             break
         else:
-            print("\nInvalid selection. Please select a valid option.")
+            print("\n| Error | Invalid selection. Please select a valid option.")
 
     # TBD How to implement task management? Making it different from notes... (done as json format)
     # use of datetime module (maybe for notes as well) (implemented for tasks) (due needs work)
@@ -92,10 +92,11 @@ def new_task():
                 try:
                     due_check = datetime.datetime.strptime(task_due, "%d-%m-%Y")
                     if due_check < datetime.datetime.now():
-                        print("Warning: Due date can not be in the past. Please enter a valid due date.\n")
+                        print("| Warning | Due date can not be in the past. Please enter a valid due date.")
+                    else:
+                        break
                 except ValueError:
-                    print("Invalid date format. Please use DD-MM-YYYY.")
-        task_priority = input("Enter task priority (optional): | (format: 'H' High, 'M' Medium, 'L' Low) |\n-- ")
+                    print("| Error | Invalid date format. Please use DD-MM-YYYY.")
         # Removing .json is actually overkill but still
         task_name = task_name.strip().removesuffix(".txt").removesuffix(".json").strip()
         filename = f"{task_name}.json"
@@ -141,7 +142,7 @@ def list_notes():
         elif option == "X":
             break
         else:
-            print("\nInvalid selection. Please select a valid option.")
+            print("\n| Error | Invalid selection. Please select a valid option.")
 
 
 def open_note():
@@ -187,7 +188,7 @@ def list_tasks():
         elif option == "X":
             break
         else:
-            print("\nInvalid selection. Please select a valid option.")
+            print("\n| Error | Invalid selection. Please select a valid option.")
 
 
 def delete_notes():
