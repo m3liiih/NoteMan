@@ -60,19 +60,18 @@ def task_management():
     # - m3liiih
 
 
-
 # txt editor implementation for windows
 def new_note():
     while True:
         note_name = input("\n| New Note | Enter note name: | \"X\" - cancel |\n-- ")
+        if note_name.upper() == "X":
+            break
         # Remove .txt if user includes it in filename (worst case " fi le na me .txt ")
         note_name = note_name.strip().removesuffix(".txt").strip()
         filename = f"{note_name}.txt"
         filepath = os.path.join(note_dir, filename)
 
-        if note_name.upper() == "X":
-            break
-        elif os.path.exists(filepath):
+        if os.path.exists(filepath):
             print(f"\n Note '{note_name}' already exists. Opening note...")
         else:
             with open(filepath, "w") as file:
@@ -87,9 +86,18 @@ def new_task():
         if task_name.upper() == "X":
             break
         task_description = input("Enter task description (optional):\n-- ")
-        task_due = input("Enter task due date (optional): | (format: DD-MM-YYYY): |\n-- ")
+        while True:
+            task_due = input("Enter task due date (optional): | (format: DD-MM-YYYY): |\n-- ")
+            if task_due:
+                try:
+                    due_check = datetime.datetime.strptime(task_due, "%d-%m-%Y")
+                    if due_check < datetime.datetime.now():
+                        print("Warning: Due date can not be in the past. Please enter a valid due date.\n")
+                except ValueError:
+                    print("Invalid date format. Please use DD-MM-YYYY.")
         task_priority = input("Enter task priority (optional): | (format: 'H' High, 'M' Medium, 'L' Low) |\n-- ")
-        task_name = task_name.strip().removesuffix(".txt").strip()
+        # Removing .json is actually overkill but still
+        task_name = task_name.strip().removesuffix(".txt").removesuffix(".json").strip()
         filename = f"{task_name}.json"
         filepath = os.path.join(task_dir, filename)
 
@@ -99,7 +107,7 @@ def new_task():
             task_data = {
                 "name": task_name,
                 "description": task_description.strip(),
-                "created_at": datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+                "created_at": datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),
                 "completed": False,
                 "due_date": task_due.strip(),
                 "priority": task_priority.strip().upper()
