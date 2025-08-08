@@ -47,10 +47,10 @@ def task_management():
         else:
             print("\nInvalid selection. Please select a valid option.")
 
-    # TBD How to implement task management? Making it different from notes...
-    # use of datetime module (maybe for notes as well)
-    # Different file format? No os text editor or different approach.
-    # Deadlines, priorities, marking tasks complete etc.
+    # TBD How to implement task management? Making it different from notes... (done as json format)
+    # use of datetime module (maybe for notes as well) (implemented for tasks) (due needs work)
+    # Different file format? No os text editor or different approach. (done as jsons and auto read)
+    # Deadlines, priorities, marking tasks complete etc. (due and priority implemented, marking not yet done)
 
     # Later to be considered:
     # Calendar like look for tasks?
