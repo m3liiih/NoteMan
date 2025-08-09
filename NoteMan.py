@@ -192,8 +192,9 @@ def list_tasks():
             try:
                 with open(filepath, 'r') as file:
                     task_data = json.load(file)
-                    print(f"- {task_data['name']}\n\tPriority: {task_data['priority']}\n\tDue: {task_data['due_date']}")
-                    print(f"\tDescription: {task_data['description'] if task_data['description'] else "None"}")
+                    print(f"- {task_data['name']}\n\tPriority: {task_data['priority']}")
+                    print(f"\tDescription: {task_data['description'] if task_data['description'] else 'None'}")
+                    print(f"\tStatus: {'Completed' if task_data['completed'] else 'In Progress'}")
             except (json.JSONDecodeError, KeyError):
                 print(f"- {task} (Invalid or corrupted task file)")
     else:
@@ -204,13 +205,35 @@ def list_tasks():
         option = input("-- ").upper()
 
         if option == "CC":
-            print("\n| Marking Task Complete Under Construction |")
+            task_complete()
         elif option == "DEL":
             delete_tasks()
         elif option == "X":
             break
         else:
             print("\n| Error | Invalid selection. Please select a valid option.")
+
+def task_complete():
+    while True:
+        task_name = input("\n| Complete Task | Enter the name of the task to mark as complete: | \"X\" - cancel |\n-- ")
+        if task_name.upper() == "X":
+            break
+        task_name = task_name.strip().removesuffix(".json").strip()
+        filename = f"{task_name}.json"
+        filepath = os.path.join(task_dir, filename)
+
+        if os.path.exists(filepath):
+            with open(filepath, 'r') as file:
+                try:
+                    task_data = json.load(file)
+                    task_data['completed'] = True
+                    with open(filepath, 'w') as file:
+                        json.dump(task_data, file, indent=4)
+                    print(f"\nTask '{task_name}' marked as complete.")
+                except json.JSONDecodeError:
+                    print(f"\nTask '{task_name}' is corrupted or invalid.")
+        else:
+            print(f"\n| Error | Task '{task_name}' does not exist. Try again.")
 
 
 def delete_notes():
