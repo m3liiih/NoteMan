@@ -5,18 +5,6 @@ note_dir = "notes"
 task_dir = "tasks"
 
 
-# TBD How to implement task management? Making it different from notes... (done as json format)
-# use of datetime module (maybe for notes as well) (implemented for tasks) (due needs work)
-# Different file format? No os text editor or different approach. (done as jsons and auto read)
-# Deadlines, priorities, marking tasks complete etc. (due and priority implemented, marking done needs more testing)
-
-# Later to be considered:
-# Calendar like look for tasks?
-# UI implementation using tkinter?
-# Extra features (classified)
-# - m3liiih
-
-
 # Main action loop to select category of action
 def get_category():
     while True:
@@ -29,9 +17,10 @@ def get_category():
             print("\n| Error | Invalid selection. Please select a valid category.")
 
 
+# Branch for Note-Taking
 def note_taking():
     while True:
-        print("\n| Note Taking | \"new\" for New Note | \"ls\" to List Notes and Note Options | \"X\" - main menu |")
+        print("\n| Note-Taking | \"new\" for New Note | \"ls\" to List Notes and Note Options | \"X\" - main menu |")
         option = input("-- ").upper()
 
         if option == "NEW":
@@ -45,6 +34,7 @@ def note_taking():
             print("\n| Error | Invalid selection. Please select a valid option.")
 
 
+# Branch for Task Management
 def task_management():
     while True:
         print("\n| Task Management | \"new\" for New Task | \"ls\" to List Tasks and Manage Tasks | \"X\" - back |")
@@ -61,7 +51,7 @@ def task_management():
             print("\n| Error | Invalid selection. Please select a valid option.")
 
 
-# txt editor implementation for windows
+# txt editor implementation for windows, other OS support TBD
 def new_note():
     while True:
         note_name = input("\n| New Note | Enter note name: | \"X\" - cancel |\n-- ")
@@ -79,8 +69,10 @@ def new_note():
                 file.write(f"| NoteMan | {note_name} | Ctrl+S to Save | Ctrl+W to Close |\n\n")
             print(f"\nNote '{note_name}' created successfully.")
         os.startfile(filepath)
+        break
 
 
+# Function to create a new task with due date and priority in JSON format
 def new_task():
     while True:
         task_name = input("\n| New Task | Enter task name: | \"X\" - cancel |\n-- ")
@@ -146,6 +138,7 @@ def new_task():
         break
 
 
+# Function to list notes and provide options to open or delete listed notes
 def list_notes():
     print("\n| List of Notes |")
 
@@ -187,6 +180,7 @@ def open_note():
             print(f"\nNote '{note_name}' does not exist.")
 
 
+# Function to calculate and display the time left until the task is due
 def due_time(task_data):
     due_date = task_data['due_date']
     try:
@@ -216,6 +210,7 @@ def due_time(task_data):
         print("\tTime Left: Invalid due date")
 
 
+# Function to list tasks and provide options to mark them complete or delete tasks
 def list_tasks():
     print("\n| List of Tasks |")
 
@@ -247,6 +242,7 @@ def list_tasks():
             break
         else:
             print("\n| Error | Invalid selection. Please select a valid option.")
+
 
 def task_complete():
     while True:
@@ -303,6 +299,7 @@ def delete_tasks():
             print(f"\n| Error | Task '{task_name}' does not exist. Try again.")
 
 
+# Main function to initialize directories and start the application
 def main():
     if not os.path.exists(note_dir):
         os.makedirs(note_dir)
