@@ -92,7 +92,7 @@ def new_task():
             if task_due:
                 try:
                     due_check = datetime.datetime.strptime(task_due, "%d-%m-%Y")
-                    if due_check < datetime.datetime.now():
+                    if due_check.date() < datetime.datetime.now().date(): # .date() to compare only date part
                         print("| Warning | Due date can not be in the past. Please enter a valid due date.")
                     elif due_check.date() == datetime.datetime.now().date():
                         print("| Warning | Due date is today. Please enter due time.")
@@ -113,9 +113,14 @@ def new_task():
                         break
                 except ValueError:
                     print("| Error | Invalid date format. Please use DD-MM-YYYY.")
+            else:
+                break
         while True:
-            task_priority = input("Enter task priority (optional): | (format: 'H' High, 'M' Medium, 'L' Low) |\n-- ")
-            if task_priority.upper() in ['H', 'M', 'L', '']:
+            task_priority = input("Enter task priority (optional): | (format: 'H' High, 'M' *Medium, 'L' Low) |\n-- ")
+            if task_priority.upper() in ['H', 'M', 'L']:
+                break
+            elif task_priority == "":
+                task_priority = "M"  # Default priority
                 break
             else:
                 print("| Error | Invalid priority. Please enter 'H' for High, 'M' for Medium, 'L' for Low")
@@ -182,6 +187,35 @@ def open_note():
             print(f"\nNote '{note_name}' does not exist.")
 
 
+def due_time(task_data):
+    due_date = task_data['due_date']
+    try:
+        if due_date:
+            if ' ' in due_date:
+                due_date = datetime.datetime.strptime(due_date, "%d-%m-%Y %H:%M")
+            else:
+                due_date = datetime.datetime.strptime(due_date, "%d-%m-%Y")
+                # Set time to end of day when not specified
+                due_date = due_date.replace(hour=23, minute=59)
+            now = datetime.datetime.now()
+            delta = due_date - now
+            if delta.total_seconds() > 0:
+                days = delta.days
+                hours, remainder = divmod(delta.seconds, 3600)
+                minutes = remainder // 60
+                if days > 0:
+                    time_left = f"{days} day(s)"
+                elif hours > 0:
+                    time_left = f"{hours} hour(s) {minutes} min(s)"
+                else:
+                    time_left = f"{minutes} min(s)"
+            else:
+                time_left = "Past due"
+            print(f"\tTime Left: {time_left}")
+    except Exception:
+        print("\tTime Left: Invalid due date")
+
+
 def list_tasks():
     print("\n| List of Tasks |")
 
@@ -193,6 +227,7 @@ def list_tasks():
                 with open(filepath, 'r') as file:
                     task_data = json.load(file)
                     print(f"- {task_data['name']}\n\tPriority: {task_data['priority']}")
+                    due_time(task_data)
                     print(f"\tDescription: {task_data['description'] if task_data['description'] else 'None'}")
                     print(f"\tStatus: {'Completed' if task_data['completed'] else 'In Progress'}")
             except (json.JSONDecodeError, KeyError):
