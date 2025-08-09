@@ -319,4 +319,7 @@ def main():
             note_taking()
         elif category == "T":
             task_management()
-main()
+
+
+if __name__ == "__main__":
+    main()
