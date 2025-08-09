@@ -5,6 +5,18 @@ note_dir = "notes"
 task_dir = "tasks"
 
 
+# TBD How to implement task management? Making it different from notes... (done as json format)
+# use of datetime module (maybe for notes as well) (implemented for tasks) (due needs work)
+# Different file format? No os text editor or different approach. (done as jsons and auto read)
+# Deadlines, priorities, marking tasks complete etc. (due and priority implemented, marking done needs more testing)
+
+# Later to be considered:
+# Calendar like look for tasks?
+# UI implementation using tkinter?
+# Extra features (classified)
+# - m3liiih
+
+
 # Main action loop to select category of action
 def get_category():
     while True:
@@ -47,17 +59,6 @@ def task_management():
             break
         else:
             print("\n| Error | Invalid selection. Please select a valid option.")
-
-    # TBD How to implement task management? Making it different from notes... (done as json format)
-    # use of datetime module (maybe for notes as well) (implemented for tasks) (due needs work)
-    # Different file format? No os text editor or different approach. (done as jsons and auto read)
-    # Deadlines, priorities, marking tasks complete etc. (due and priority implemented, marking not yet done)
-
-    # Later to be considered:
-    # Calendar like look for tasks?
-    # UI implementation using tkinter?
-    # Extra features (classified)
-    # - m3liiih
 
 
 # txt editor implementation for windows
@@ -225,7 +226,7 @@ def delete_notes():
             os.remove(filepath)
             print(f"\nNote '{note_name}' deleted successfully.")
         else:
-            print(f"\nNote '{note_name}' does not exist. Try again.")
+            print(f"\n| Error | Note '{note_name}' does not exist. Try again.")
 
 
 def delete_tasks():
@@ -241,7 +242,7 @@ def delete_tasks():
             os.remove(filepath)
             print(f"\nTask '{task_name}' deleted successfully.")
         else:
-            print(f"\nTask '{task_name}' does not exist. Try again.")
+            print(f"\n| Error | Task '{task_name}' does not exist. Try again.")
 
 
 def main():
