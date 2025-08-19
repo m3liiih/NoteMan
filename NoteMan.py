@@ -1,8 +1,28 @@
 import os
+import platform
 import json
 import datetime
 note_dir = "notes"
 task_dir = "tasks"
+
+
+# Main function to initialize directories and start the application
+def main():
+    if not os.path.exists(note_dir):
+        os.makedirs(note_dir)
+
+    if not os.path.exists(task_dir):
+        os.makedirs(task_dir)
+
+    print("\nWelcome to NoteMan, your personal Note Taking and Task Management Companion :)")
+
+    while True:
+        category = get_category()
+
+        if category == "N":
+            note_taking()
+        elif category == "T":
+            task_management()
 
 
 # Main action loop to select category of action
@@ -12,7 +32,7 @@ def get_category():
         if category in ["N", "T"]:
             return category
         elif category == "X":
-            exit()
+            exit(0)
         else:
             print("\n| Error | Invalid selection. Please select a valid category.")
 
@@ -68,7 +88,14 @@ def new_note():
             with open(filepath, "w") as file:
                 file.write(f"| NoteMan | {note_name} | Ctrl+S to Save | Ctrl+W to Close |\n\n")
             print(f"\nNote '{note_name}' created successfully.")
-        os.startfile(filepath)
+        if os.name == 'nt':  # Check for Windows
+            os.startfile(filepath)
+        elif platform.system() == 'Darwin':  # Check for macOS
+            os.system(f"open '{filepath}'")
+        elif os.name == 'posix': # Check for Linux
+            os.system(f"xdg-open '{filepath}'")
+        else:
+            print("\n| Error | Unsupported OS.")
         break
 
 
@@ -175,7 +202,14 @@ def open_note():
         if note_name.upper() == "X":
             break
         elif os.path.exists(filepath):
-                os.startfile(filepath)
+                if os.name == 'nt':
+                    os.startfile(filepath)
+                elif platform.system() == 'Darwin':  # Check for macOS
+                    os.system(f"open '{filepath}'")
+                elif os.name == 'posix':  # Check for Linux
+                    os.system(f"xdg-open '{filepath}'")
+                else:
+                    print("\n| Error | Unsupported OS.")
         else:
             print(f"\nNote '{note_name}' does not exist.")
 
@@ -299,24 +333,4 @@ def delete_tasks():
             print(f"\n| Error | Task '{task_name}' does not exist. Try again.")
 
 
-# Main function to initialize directories and start the application
-def main():
-    if not os.path.exists(note_dir):
-        os.makedirs(note_dir)
-
-    if not os.path.exists(task_dir):
-        os.makedirs(task_dir)
-
-    print("\nWelcome to NoteMan, your personal Note Taking and Task Management Companion :)")
-
-    while True:
-        category = get_category()
-
-        if category == "N":
-            note_taking()
-        elif category == "T":
-            task_management()
-
-
-if __name__ == "__main__":
-    main()
+main()
