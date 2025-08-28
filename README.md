@@ -65,6 +65,5 @@ On launch, select a category:
 
 ## 🔮 Future Enhancements
 
-- Cross-platform support for opening notes (Linux/macOS).
 - GUI interface with `tkinter` or similar with additional features.
 - Listing options (due, priority etc.)
