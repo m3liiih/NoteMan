@@ -1,6 +1,6 @@
 # NoteMan
 
-NoteMan is a lightweight, easy-to-use **command-line** application designed to help you manage personal **notes** and **tasks** efficiently. It supports creating, listing, editing, and deleting plain text notes, as well as task management with priorities and due dates in JSON format.
+NoteMan is a lightweight, easy-to-use **command-line** application designed to help you manage personal **notes** and **tasks** efficiently. It supports creating, listing, editing, and deleting plain text notes, as well as task management with priorities and due dates in JSON format. Supports Windows, Linux and MacOS note editors.
 
 ---
 
